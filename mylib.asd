@@ -23,6 +23,11 @@
   :components ((:module "tests"
                 :components
                 ((:file "packages")
-                 (:file "syntax"))))
+                 (:file "syntax")
+                 (:file "number")
+                 (:file "sequence")
+                 (:file "list")
+                 (:file "algorithm")
+                 (:file "amb"))))
   :description "Test system for mylib"
   :perform (test-op (op c) (symbol-call :rove :run c)))

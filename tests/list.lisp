@@ -1,0 +1,56 @@
+(in-package #:mylib/tests/list)
+
+(deftest basic-list-helpers
+  (ok (= 1 (ensure-car '(1 2 3))))
+  (ok (= 1 (ensure-car 1)))
+  (ok (equal '(1) (ensure-list 1)))
+  (ok (null (ensure-list nil)))
+  (ok (equal '(2 . 1) (xcons 1 2)))
+  (ok (= 3 (last1 '(1 2 3)))))
+
+(deftest length-and-slicing
+  (ok (length= '(1 2 3) 3))
+  (ok (length< '(1 2) 3))
+  (ok (length<= '(1 2) 2))
+  (ok (length> '(1 2 3) 2))
+  (ok (length>= '(1 2 3) 3))
+  (ok (equal '(1 2) (take '(1 2 3 4) 2)))
+  (ok (equal '(3 4) (drop '(1 2 3 4) 2))))
+
+(deftest tconc-and-lconc
+  (let ((pointer nil))
+    (setf pointer (tconc pointer 1))
+    (setf pointer (tconc pointer 2))
+    (ok (equal '(1 2) (car pointer))))
+  (let ((pointer nil))
+    (setf pointer (lconc pointer '(1 2)))
+    (setf pointer (lconc pointer '(3 4)))
+    (ok (equal '(1 2 3 4) (car pointer)))))
+
+(deftest collection-and-transform
+  (ok (equal '(2 4)
+             (filter-map (lambda (x)
+                           (and (evenp x) x))
+                         '(1 2 3 4))))
+  (ok (equal '(1 11 21)
+             (filter-map #'+ '(1 2 3) '(0 9 18))))
+  (ok (equal '(3 4 5) (iota 3 :start 3)))
+  (ok (equal '(1 2 1) (unique '(1 1 2 2 1 1))))
+  (ok (equal '(1 2 3 4)
+             (flatten (list (list 1 (list 2))
+                            (list 3 4)))))
+  (ok (equal '(1 :x 2 :x 3) (join '(1 2 3) :x))))
+
+(deftest with-collector-builds-list
+  (ok (equal '(1 2 3)
+             (with-collector (collect)
+               (collect 1)
+               (collect 2)
+               (collect 3)
+               (collect))))
+  (ok (equal '(a nil b)
+             (with-collector (collect)
+               (collect 'a)
+               (collect nil)
+               (collect 'b)
+               (collect)))))

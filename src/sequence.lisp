@@ -62,13 +62,6 @@
            sequence
            more-sequences)))
 
-(defun get-start-index (sequence &key from-end start end (initial-value nil ivp))
-  (if from-end
-      (- (or end (length sequence))
-         (if ivp 1 2))
-      (+ (or start 0)
-         (if ivp 0 1))))
-
 (declaim (ftype (function ((or (function (unsigned-byte t t) t) symbol)
                            sequence
                            &rest t
@@ -77,16 +70,43 @@
                 reduce-with-index))
 (defun reduce-with-index (function sequence
                           &rest args
-                          &key key from-end start end initial-value)
-  (declare (ignore key start end initial-value))
-  (let ((index (apply #'get-start-index args))
-        (delta (if from-end -1 1)))
-    (apply #'reduce
-           #'(lambda (x y)
-               (prog1 (funcall function index x y)
-                 (incf index delta)))
-           sequence
-           args)))
+                          &key key from-end (start 0) end (initial-value nil ivp))
+  (declare (ignore args))
+  (let* ((end (or end (length sequence)))
+         (transform (if key
+                        key
+                        #'identity)))
+    (cond
+      ((= start end)
+       (if ivp
+           initial-value
+           (error "REDUCE-WITH-INDEX requires an initial value for an empty sequence.")))
+      (from-end
+       (let ((acc (if ivp
+                      initial-value
+                      (funcall transform (elt sequence (1- end))))))
+         (loop for index downfrom (if ivp
+                                      (1- end)
+                                      (- end 2))
+               to start
+               do (setf acc (funcall function
+                                     index
+                                     acc
+                                     (funcall transform (elt sequence index)))))
+         acc))
+      (t
+       (let ((acc (if ivp
+                      initial-value
+                      (funcall transform (elt sequence start)))))
+         (loop for index from (if ivp
+                                  start
+                                  (1+ start))
+               below end
+               do (setf acc (funcall function
+                                     index
+                                     acc
+                                     (funcall transform (elt sequence index)))))
+         acc)))))
 
 (declaim (ftype (function ((or (function (unsigned-byte t) t) symbol)
                            sequence
@@ -95,18 +115,21 @@
                           (or null (cons fixnum t)))
                 find-with-index))
 (defun find-with-index (predicate sequence &rest args &key from-end start end key)
-  (declare (ignore start end key))
-  (let ((index (apply #'get-start-index args))
-        (delta (if from-end -1 1)))
-    (let* ((last-index 0)
-           (found (apply #'find-if
-                         #'(lambda (x)
-                             (prog1 (funcall predicate index x)
-                               (setf last-index index)
-                               (incf index delta)))
-                         sequence
-                         args)))
-      (and found (cons last-index found)))))
+  (declare (ignore args))
+  (let* ((start (or start 0))
+         (end (or end (length sequence)))
+         (transform (if key
+                        key
+                        #'identity)))
+    (if from-end
+        (loop for index downfrom (1- end) to start
+              for item = (elt sequence index)
+              when (funcall predicate index (funcall transform item))
+                do (return (cons index item)))
+        (loop for index from start below end
+              for item = (elt sequence index)
+              when (funcall predicate index (funcall transform item))
+                do (return (cons index item))))))
 
 (declaim (ftype (function ((or (function (t t) boolean) symbol)
                            sequence
@@ -114,21 +137,35 @@
                            &key (:key t) (:from-end t) (:start fixnum) (:end fixnum)) t)
                 argopt))
 (defun argopt (predicate sequence &rest args &key key from-end start end)
-  (declare (ignore key from-end start end))
-  (cdr (apply #'reduce-with-index
-              #'(lambda (i acc x)
-                  (if (or (null acc)
-                          (funcall predicate x (car acc)))
-                      (cons x i)
-                      acc))
-              sequence
-              :initial-value nil
-              args)))
+  (declare (ignore args))
+  (let* ((start (or start 0))
+         (end (or end (length sequence)))
+         (transform (if key
+                        key
+                        #'identity)))
+    (when (< start end)
+      (if from-end
+          (let* ((best-index (1- end))
+                 (best-value (funcall transform (elt sequence best-index))))
+            (loop for index downfrom (- end 2) to start
+                  for value = (funcall transform (elt sequence index))
+                  when (funcall predicate value best-value)
+                    do (setf best-index index
+                             best-value value))
+            best-index)
+          (let* ((best-index start)
+                 (best-value (funcall transform (elt sequence best-index))))
+            (loop for index from (1+ start) below end
+                  for value = (funcall transform (elt sequence index))
+                  when (funcall predicate value best-value)
+                    do (setf best-index index
+                             best-value value))
+            best-index)))))
 
 (declaim (ftype (function (sequence &rest t &key (:key t) (:from-end t) (:start fixnum) (:end fixnum)) t)
                 argmax))
 (defun argmax (sequence &rest args &key key from-end start end)
-  (declare (ignore key from-end start  end))
+  (declare (ignore key from-end start end))
   (apply #'argopt #'> sequence args))
 
 (declaim (ftype (function (sequence &rest t &key (:key t) (:from-end t) (:start fixnum) (:end fixnum)) t)
