@@ -80,6 +80,7 @@
 (defpackage #:mylib.algorithm
   (:use #:cl)
   (:export #:meguru-method
+           #:binary-search
            #:lower-bound
            #:upper-bound
            ))
