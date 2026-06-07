@@ -19,6 +19,7 @@
            #:acond
            #:if-let
            #:if-let*
+           #:and-let*
            #:when-let
            #:when-let*
            #:debug-print
