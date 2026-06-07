@@ -59,3 +59,17 @@
            (when-let* ((x 1) (y (+ x 1)))
              (setf sum (+ x y)))
            sum))))
+
+(deftest debug-print-prints-expression-and-value
+  (let ((output (with-output-to-string (*error-output*)
+                  (ok (= 3
+                         (debug-print (+ 1 2)))))))
+    (ok (search "DEBUG: (+ 1 2) => 3" output))))
+
+(deftest debug-print*-prints-selected-bindings-and-value
+  (let ((x 10)
+        (y 20))
+    (let ((output (with-output-to-string (*error-output*)
+                    (ok (= 30
+                           (debug-print* (x y) (+ x y)))))))
+      (ok (search "DEBUG*: X=10 Y=20 (+ X Y) => 30" output)))))

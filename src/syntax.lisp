@@ -79,3 +79,34 @@
 (defmacro when-let* (binds &body body)
   `(let* ,binds
      (when (and ,@(mapcar #'car binds) ,@body))))
+
+(defun %debug-print*-bindings-string (bindings)
+  (with-output-to-string (stream)
+    (loop for (name . value) in bindings
+          for firstp = t then nil
+          do (unless firstp
+               (write-char #\Space stream))
+             (format stream "~A=~S" name value))))
+
+(defmacro debug-print (expr)
+  (let ((value (gensym)))
+    `(let ((,value ,expr))
+       (fresh-line *error-output*)
+       (format *error-output* "DEBUG: ~S => ~S~%" ',expr ,value)
+       ,value)))
+
+(defmacro debug-print* (vars expr)
+  (let ((value (gensym))
+        (bindings (gensym)))
+    `(let* ((,value ,expr)
+            (,bindings (list ,@(mapcar (lambda (var)
+                                         `(cons ',var ,var))
+                                       vars))))
+       (fresh-line *error-output*)
+       (format *error-output*
+               "DEBUG*: ~A ~S => ~S~%"
+               (%debug-print*-bindings-string ,bindings)
+               ',expr
+               ,value)
+       ,value)))
+

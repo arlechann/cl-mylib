@@ -21,6 +21,8 @@
            #:if-let*
            #:when-let
            #:when-let*
+           #:debug-print
+           #:debug-print*
            ))
 
 (defpackage #:mylib.number
