@@ -5,6 +5,11 @@
         #:mylib.syntax
         #:rove))
 
+(defpackage #:mylib/tests/function
+  (:use #:cl
+        #:mylib.function
+        #:rove))
+
 (defpackage #:mylib/tests/number
   (:use #:cl
         #:mylib.number

@@ -25,6 +25,15 @@
            #:debug-print*
            ))
 
+(defpackage #:mylib.function
+  (:use #:cl)
+  (:export #:flip
+           #:compose
+           #:conjoin
+           #:disjoin
+           #:pa
+           #:pa*))
+
 (defpackage #:mylib.number
   (:use #:cl)
   (:export #:*eps*

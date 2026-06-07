@@ -22,6 +22,8 @@ ASDF から `mylib` system をロードしてください。
 
 - `mylib.syntax`
   - 制御構文や補助マクロ
+- `mylib.function`
+  - 関数合成、述語合成、部分適用マクロ
 - `mylib.number`
   - 数値処理の小関数・マクロ
 - `mylib.sequence`
@@ -38,3 +40,4 @@ ASDF から `mylib` system をロードしてください。
 ```lisp
 (use-package :mylib.list)
 ```
+

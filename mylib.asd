@@ -7,6 +7,7 @@
                 :components
                 ((:file "packages")
                  (:file "syntax")
+                 (:file "function")
                  (:file "number")
                  (:file "sequence")
                  (:file "list")
@@ -24,6 +25,7 @@
                 :components
                 ((:file "packages")
                  (:file "syntax")
+                 (:file "function")
                  (:file "number")
                  (:file "sequence")
                  (:file "list")
