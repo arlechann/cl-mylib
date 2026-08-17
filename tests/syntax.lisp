@@ -30,6 +30,32 @@
       (incf i))
     (ok (= 4 i))))
 
+(deftest sequence-and-array-iteration-macros
+  (let ((sum 0))
+    (ok (= 6
+           (do-array (x #(1 2 3) sum)
+             (incf sum x)))))
+  (let ((sum 0))
+    (ok (= 10
+           (do-array (x #2A((1 2) (3 4)) sum)
+             (incf sum x)))))
+  (let ((sum 0))
+    (ok (= 21
+           (do-array* ((x y) (#(1 2 3) #(4 5 6 7)) sum)
+             (incf sum (+ x y))))))
+  (let ((sum 0))
+    (ok (= 110
+           (do-array* ((x y) (#2A((1 2) (3 4)) #2A((10 20) (30 40) (50 60))) sum)
+             (incf sum (+ x y))))))
+  (let ((sum 0))
+    (ok (= 6
+           (do-seq (x '(1 2 3) sum)
+             (incf sum x)))))
+  (let ((sum 0))
+    (ok (= 21
+           (do-seq* ((x y) ((list 1 2 3) (list 4 5 6)) sum)
+             (incf sum (+ x y)))))))
+
 (deftest anaphoric-macros
   (ok (= 6 (aif (+ 1 2) (+ it 3) 0)))
   (ok (null (aif nil (+ it 3) nil)))

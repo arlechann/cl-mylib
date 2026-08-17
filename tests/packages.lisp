@@ -25,6 +25,21 @@
         #:mylib.list
         #:rove))
 
+(defpackage #:mylib/tests/string
+  (:use #:cl
+        #:mylib.string
+        #:rove))
+
+(defpackage #:mylib/tests/lazy
+  (:use #:cl
+        #:mylib.lazy
+        #:rove))
+
+(defpackage #:mylib/tests/list-queue
+  (:use #:cl
+        #:list-queue
+        #:rove))
+
 (defpackage #:mylib/tests/algorithm
   (:use #:cl
         #:mylib.algorithm

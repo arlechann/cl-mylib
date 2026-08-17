@@ -2,6 +2,11 @@
 
 (deftest numeric-helpers
   (ok (= 9 (square 3)))
+  (ok (= 27 (cube 3)))
+  (ok (= 32 (pow 2 5)))
+  (ok (= 3 (diff 10 7)))
+  (ok (= 8 (next-pow2 5)))
+  (ok (= 8 (next-pow2 8)))
   (ok (= 3 (clamp 3 0 5)))
   (ok (= 0 (clamp -1 0 5)))
   (ok (= 5 (clamp 8 0 5)))

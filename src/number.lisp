@@ -1,7 +1,30 @@
 (in-package #:mylib.number)
 
-(declaim (ftype (function (t) t) square))
-(defun square (x) (* x x))
+(declaim (ftype (function (t &optional (function (t t) t)) t) square))
+(defun square (x &optional (op #'*)) (funcall op x x))
+
+(declaim (ftype (function (t &optional (function (t t) t)) t) cube))
+(defun cube (x &optional (op #'*)) (funcall op (funcall op x x) x))
+
+(declaim (ftype (function (t unsigned-byte &key (:op (function (t t) t)) (:identity t)) t) pow))
+(defun pow (base power &key (op #'*) (identity 1))
+  (mylib.syntax:nlet rec ((base base) (power power) (ret identity))
+    (cond ((zerop power) ret)
+          ((oddp power)
+           (rec (square base op) (floor power 2) (funcall op ret base)))
+          (t (rec (square base op) (floor power 2) ret)))))
+
+(declaim (ftype (function (number number) (real 0 *)) diff))
+(defun diff (a b) (abs (- a b)))
+
+(declaim (ftype (function (unsigned-byte) unsigned-byte) next-pow2))
+(defun next-pow2 (n)
+  (declare (type unsigned-byte n))
+  (if (zerop (logand n (1- n))) n
+      (mylib.syntax:nlet rec ((n n) (acc 1))
+        (if (zerop n)
+            acc
+            (rec (ash n -1) (ash acc 1))))))
 
 (declaim (ftype (function (real real real) real) clamp))
 (defun clamp (x low high) (max low (min x high)))

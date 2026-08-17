@@ -10,6 +10,38 @@
                  symbols)
      ,@body))
 
+(defmacro do-array* (((&rest vars) (&rest arrays) &optional result) &body body)
+  (let ((arrs (mapcar (lambda (x)
+                        (declare (ignore x))
+                        (gensym))
+                      arrays))
+        (index (gensym))
+        (min-size (gensym)))
+    `(let* (,@(mapcar #'list arrs arrays)
+            (,min-size (apply #'min (mapcar #'array-total-size (list ,@arrs)))))
+       (do ((,index 0 (1+ ,index)))
+           ((= ,index ,min-size) ,result)
+         (let ,(mapcar (lambda (var array-var)
+                         `(,var (row-major-aref ,array-var ,index)))
+                       vars arrs)
+           (declare (ignorable ,@vars))
+           ,@body)))))
+
+(defmacro do-array ((var array &optional result) &body body)
+  `(do-array* ((,var) (,array) ,result) ,@body))
+
+(defmacro do-seq* (((&rest vars) (&rest sequences) &optional result) &body body)
+  `(block nil
+     (map nil
+          (lambda ,vars
+            (declare (ignorable ,@vars))
+            ,@body)
+          ,@sequences)
+     ,result))
+
+(defmacro do-seq ((var sequence &optional result) &body body)
+  `(do-seq* ((,var) (,sequence) ,result) ,@body))
+
 (defmacro nlet (name binds &body body)
   (let ((tag (gensym))
         (vars (mapcar #'car binds))

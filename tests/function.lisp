@@ -45,6 +45,7 @@
     (ok (= 1 count))))
 
 (deftest flip-reverses-all-arguments
+  (ok (null (do-nothing 1 2 3)))
   (ok (= 7
          (funcall (flip #'-) 3 10)))
   (ok (equal '(3 2 1)

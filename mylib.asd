@@ -9,8 +9,11 @@
                  (:file "syntax")
                  (:file "function")
                  (:file "number")
+                 (:file "list-queue")
                  (:file "sequence")
                  (:file "list")
+                 (:file "string")
+                 (:file "lazy")
                  (:file "algorithm")
                  (:file "amb"))))
   :description ""
@@ -29,6 +32,9 @@
                  (:file "number")
                  (:file "sequence")
                  (:file "list")
+                 (:file "string")
+                 (:file "lazy")
+                 (:file "list-queue")
                  (:file "algorithm")
                  (:file "amb"))))
   :description "Test system for mylib"

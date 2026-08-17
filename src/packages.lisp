@@ -9,6 +9,10 @@
            #:self
            #:eval-always
            #:with-gensyms
+           #:do-array
+           #:do-array*
+           #:do-seq
+           #:do-seq*
            #:nlet
            #:while
            #:until
@@ -28,7 +32,8 @@
 
 (defpackage #:mylib.function
   (:use #:cl)
-  (:export #:flip
+  (:export #:do-nothing
+           #:flip
            #:compose
            #:conjoin
            #:disjoin
@@ -38,6 +43,10 @@
 (defpackage #:mylib.number
   (:use #:cl)
   (:export #:*eps*
+           #:cube
+           #:pow
+           #:diff
+           #:next-pow2
            #:square
            #:clamp
            #:maxp
@@ -64,15 +73,26 @@
            #:argopt
            #:argmax
            #:argmin
-           ))
+           #:window-map
+           #:window-nmap
+           #:run-length-encode
+           #:vector*
+           #:displaced-subvec))
 
 (defpackage #:mylib.list
   (:use #:cl)
   (:export #:ensure-car
            #:ensure-list
            #:xcons
+           #:mapc-with-index
+           #:mapcar-with-index
+           #:mapcan-with-index
+           #:mapl-with-index
+           #:maplist-with-index
+           #:mapcon-with-index
            #:tconc
            #:lconc
+           #:singlep
            #:last1
            #:length=
            #:length<
@@ -83,11 +103,33 @@
            #:drop
            #:filter-map
            #:iota
+           #:longerp
+           #:longer
+           #:unfold
            #:unique
+           #:chunks
            #:flatten
            #:join
-           #:with-collector
-           ))
+           #:with-collector))
+
+(defpackage #:mylib.string
+  (:use #:cl)
+  (:export #:strjoin
+           #:trim-whitespace))
+
+(defpackage #:mylib.lazy
+  (:use #:cl)
+  (:export #:delay
+           #:force))
+
+(defpackage #:list-queue
+  (:use #:cl)
+  (:export #:make-list-queue
+           #:list-queue-empty-p
+           #:list-queue-peek
+           #:list-queue-raw
+           #:list-queue-enqueue
+           #:list-queue-dequeue))
 
 (defpackage #:mylib.algorithm
   (:use #:cl)

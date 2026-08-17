@@ -1,5 +1,8 @@
 (in-package #:mylib.function)
 
+(defun do-nothing (&rest args)
+  (declare (ignore args)))
+
 (defun flip (function)
   #'(lambda (&rest args)
       (apply function (reverse args))))

@@ -16,6 +16,32 @@
 (defun xcons (cdr car)
   (cons car cdr))
 
+(macrolet ((%def-map-list-with-index (map-function-name)
+             (let ((name (intern (format nil "~A-WITH-INDEX" map-function-name)
+                                 (find-package '#:mylib.list)))
+                   (fn (gensym "FN"))
+                   (lst (gensym "LST"))
+                   (more-lst (gensym "MORE-LST"))
+                   (index (gensym))
+                   (args (gensym)))
+               `(progn
+                  (declaim (ftype (function ((or (function (unsigned-byte t &rest t) t) symbol)
+                                             list &rest list)
+                                            list)
+                                  ,name))
+                  (defun ,name (,fn ,lst &rest ,more-lst)
+                    (let ((,index 0))
+                      (apply #',map-function-name
+                             #'(lambda (&rest ,args)
+                                 (prog1 (apply ,fn ,index ,args) (incf ,index)))
+                             ,lst ,more-lst)))))))
+  (%def-map-list-with-index mapc)
+  (%def-map-list-with-index mapcar)
+  (%def-map-list-with-index mapcan)
+  (%def-map-list-with-index mapl)
+  (%def-map-list-with-index maplist)
+  (%def-map-list-with-index mapcon))
+
 (declaim (ftype (function (list t) cons) tconc))
 (defun tconc (pointer obj)
   (when (null pointer)
@@ -44,6 +70,9 @@
 (declaim (ftype (function (list) t) last1))
 (defun last1 (list)
   (car (last list)))
+
+(declaim (ftype (function (list) boolean) singlep))
+(defun singlep (lst) (and lst (null (cdr lst))))
 
 (declaim (ftype (function (list fixnum) boolean) length=))
 (defun length= (list n)
@@ -110,6 +139,28 @@
       ((<= count 0) (nreverse acc))
     (push start acc)))
 
+(declaim (ftype (function (list list) list) longerp))
+(defun longerp (lst1 lst2)
+  (mylib.syntax:nlet rec ((lst1 lst1) (lst2 lst2))
+    (cond ((null lst1) nil)
+          ((null lst2) lst1)
+          (t (rec (cdr lst1) (cdr lst2))))))
+
+(declaim (ftype (function (list list) list) longer))
+(defun longer (lst1 lst2) (if (longerp lst1 lst2) lst1 lst2))
+
+(declaim (ftype (function ((function (t) t) (function (t) t) (function (t) t) t
+                                            &optional (function (t) t))
+                          list)
+                unfold))
+(defun unfold (predicate fn next-generator seed &optional tail)
+  (mylib.syntax:nlet rec ((seed seed) (acc nil))
+    (if (funcall predicate seed)
+        (if (null tail)
+            (nreverse acc)
+            (nreconc acc (funcall tail seed)))
+        (rec (funcall next-generator seed) (cons (funcall fn seed) acc)))))
+
 (declaim (ftype (function (list &key (:test (function (t t) boolean))) list) unique))
 (defun unique (list &key (test #'eql))
   (nreverse (reduce #'(lambda (acc x)
@@ -151,3 +202,13 @@
                       collectors
                       lists)
          ,@body))))
+
+(declaim (ftype (function (list (integer 1 *) &key (:fractionp t)) list) chunks))
+(defun chunks (lst size &key (fractionp t))
+  (mylib.syntax:nlet outer ((lst lst) (acc nil))
+    (if (null lst)
+        (nreverse acc)
+        (mylib.syntax:nlet inner ((lst lst) (rest size) (chunk nil) (acc acc))
+          (cond ((zerop rest) (outer lst (cons (nreverse chunk) acc)))
+                ((null lst) (outer nil (if fractionp (cons (nreverse chunk) acc) acc)))
+                (t (inner (cdr lst) (1- rest) (cons (car lst) chunk) acc)))))))

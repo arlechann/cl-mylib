@@ -28,8 +28,15 @@ ASDF から `mylib` system をロードしてください。
   - 数値処理の小関数・マクロ
 - `mylib.sequence`
   - sequence 操作の補助
+  - スライディングウィンドウ処理
 - `mylib.list`
   - list 構築・加工の補助
+- `mylib.string`
+  - 文字列処理の補助
+- `mylib.lazy`
+  - 遅延評価
+- `list-queue`
+  - リストベースのキュー
 - `mylib.algorithm`
   - 二分探索系のアルゴリズム
 - `mylib.amb`
@@ -48,6 +55,14 @@ ASDF から `mylib` system をロードしてください。
 Macro: **eval-always** `&body body`
 
 Macro: **with-gensyms** `symbols &body body`
+
+Macro: **do-array** `(var array &optional result) &body body`
+
+Macro: **do-array\*** `((vars) (arrays) &optional result) &body body`
+
+Macro: **do-seq** `(var sequence &optional result) &body body`
+
+Macro: **do-seq\*** `((vars) (sequences) &optional result) &body body`
 
 Macro: **nlet** `name binds &body body`
 
@@ -81,7 +96,9 @@ Macro: **debug-print\*** `(vars) expr`
 
 ### `mylib.function`
 
-Function: **flip** function
+Function: **do-nothing** `&rest args`
+
+Function: **flip** `function`
 
 Function: **compose** `&rest functions`
 
@@ -99,7 +116,15 @@ Macro: **pa\*** `function &rest forms`
 
 Variable: **\*eps\***
 
-Function: **square** x
+Function: **square** `x`
+
+Function: **cube** `x`
+
+Function: **pow** `base power &key (op #'*) (identity 1)`
+
+Function: **diff** `a b`
+
+Function: **next-pow2** `n`
 
 Function: **clamp** `x low high`
 
@@ -123,7 +148,7 @@ Function: **approx>=** `x y &key (eps *eps*)`
 
 ### `mylib.sequence`
 
-Function: **sum** sequence
+Function: **sum** `sequence`
 
 Macro: **sortf** `place compare &rest args`
 
@@ -145,19 +170,43 @@ Function: **argmax** `sequence &key key from-end start end`
 
 Function: **argmin** `sequence &key key from-end start end`
 
+Function: **window-map** `result-type window-size fn sequence`
+
+Function: **window-nmap** `window-size fn sequence`
+
+Function: **run-length-encode** `sequence &key (test #'eql)`
+
+Function: **vector\*** `&rest contents`
+
+Function: **displaced-subvec** `vector &key (start 0) end`
+
 ### `mylib.list`
 
-Function: **ensure-car** list
+Function: **ensure-car** `list`
 
-Function: **ensure-list** obj
+Function: **ensure-list** `obj`
 
 Function: **xcons** `cdr car`
+
+Function: **mapc-with-index** `fn list &rest more-lists`
+
+Function: **mapcar-with-index** `fn list &rest more-lists`
+
+Function: **mapcan-with-index** `fn list &rest more-lists`
+
+Function: **mapl-with-index** `fn list &rest more-lists`
+
+Function: **maplist-with-index** `fn list &rest more-lists`
+
+Function: **mapcon-with-index** `fn list &rest more-lists`
 
 Function: **tconc** `pointer obj`
 
 Function: **lconc** `pointer list`
 
-Function: **last1** list
+Function: **singlep** `list`
+
+Function: **last1** `list`
 
 Function: **length=** `list n`
 
@@ -177,9 +226,17 @@ Function: **filter-map** `fn list &rest more-list`
 
 Function: **iota** `count &key (start 0) (step 1)`
 
+Function: **longerp** `lst1 lst2`
+
+Function: **longer** `lst1 lst2`
+
+Function: **unfold** `predicate fn next-generator seed &optional tail`
+
 Function: **unique** `list &key (test #'eql)`
 
-Function: **flatten** list
+Function: **chunks** `lst size &key (fractionp t)`
+
+Function: **flatten** `list`
 
 Function: **join** `list separator`
 
@@ -194,6 +251,32 @@ Function: **binary-search** `ok ng predicate &key (eps mylib.number:*eps*) (max-
 Function: **lower-bound** `vector element &key (start 0) end`
 
 Function: **upper-bound** `vector element &key (start 0) end`
+
+### `mylib.string`
+
+Function: **strjoin** `strings &key (spacer (string #\Newline))`
+
+Function: **trim-whitespace** `string`
+
+### `mylib.lazy`
+
+Macro: **delay** `expr`
+
+Function: **force** `promise`
+
+### `list-queue`
+
+Function: **make-list-queue**
+
+Function: **list-queue-empty-p** `queue`
+
+Function: **list-queue-peek** `queue`
+
+Function: **list-queue-raw** `queue`
+
+Function: **list-queue-enqueue** `queue value`
+
+Function: **list-queue-dequeue** `queue`
 
 ### `mylib.amb`
 
