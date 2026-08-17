@@ -64,6 +64,8 @@
   (:use #:cl)
   (:export #:sum
            #:sortf
+           #:reversef
+           #:nreversef
            #:map-with-index
            #:map-into-with-index
            #:nmap

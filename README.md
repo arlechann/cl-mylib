@@ -152,6 +152,10 @@ Function: **sum** `sequence`
 
 Macro: **sortf** `place compare &rest args`
 
+Macro: **reversef** `place`
+
+Macro: **nreversef** `place`
+
 Function: **map-with-index** `result-type fn sequence &rest more-sequences`
 
 Function: **map-into-with-index** `result-sequence fn &rest sequences`

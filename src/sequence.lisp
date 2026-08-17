@@ -10,6 +10,10 @@
     (declare (ignore key))
     (apply #'sort sequence copare args)))
 
+(define-modify-macro reversef () reverse)
+
+(define-modify-macro nreversef () nreverse)
+
 (declaim (ftype (function ((or cons symbol class)
                            (or (function (unsigned-byte t &rest t) t) symbol)
                            sequence

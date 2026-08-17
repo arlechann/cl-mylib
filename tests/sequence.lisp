@@ -33,6 +33,20 @@
     (setf (aref sub 0) 20)
     (ok (= 20 (aref v 1)))))
 
+(deftest sequence-modifying-macros
+  (let ((lst (list 1 2 3)))
+    (reversef lst)
+    (ok (equal '(3 2 1) lst)))
+  (let ((lst nil))
+    (reversef lst)
+    (ok (null lst)))
+  (let ((lst (list 1 2 3)))
+    (nreversef lst)
+    (ok (equal '(3 2 1) lst)))
+  (let ((lst nil))
+    (nreversef lst)
+    (ok (null lst))))
+
 (deftest indexed-reduce-and-find
   (ok (= 9
          (reduce-with-index (lambda (i acc x)
