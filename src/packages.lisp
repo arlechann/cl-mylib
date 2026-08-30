@@ -14,6 +14,8 @@
            #:do-seq
            #:do-seq*
            #:nlet
+           #:block-lambda
+           #:named-lambda
            #:while
            #:until
            #:aif

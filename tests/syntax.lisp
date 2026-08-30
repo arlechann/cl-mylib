@@ -18,6 +18,36 @@
                acc
                (sum (1+ i) (+ acc i)))))))
 
+(deftest lambda-macros-provide-blocks
+  (ok (= 10
+         (funcall (block-lambda (x)
+                    (when (minusp x)
+                      (return-from nil 0))
+                    (+ x 3))
+                  7)))
+  (ok (= 0
+         (funcall (block-lambda (x)
+                    (when (minusp x)
+                      (return-from nil 0))
+                    (+ x 3))
+                  -1)))
+  (ok (= 120
+         (funcall (named-lambda fact (n)
+                    (when (minusp n)
+                      (return-from fact 0))
+                    (if (zerop n)
+                        1
+                        (* n (fact (1- n)))))
+                  5)))
+  (ok (= 0
+         (funcall (named-lambda fact (n)
+                    (when (minusp n)
+                      (return-from fact 0))
+                    (if (zerop n)
+                        1
+                        (* n (fact (1- n)))))
+                  -1))))
+
 (deftest while-and-until-loop
   (let ((i 0)
         (acc nil))

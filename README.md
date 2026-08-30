@@ -66,6 +66,10 @@ Macro: **do-seq\*** `((vars) (sequences) &optional result) &body body`
 
 Macro: **nlet** `name binds &body body`
 
+Macro: **block-lambda** `params &body body`
+
+Macro: **named-lambda** `name params &body body`
+
 Macro: **while** `test &body body`
 
 Macro: **until** `test &body body`

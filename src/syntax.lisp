@@ -65,6 +65,16 @@
                                      (go ,',tag))))
                   ,@body))))))))
 
+(defmacro block-lambda (params &body body)
+  `(lambda ,params
+     (block nil
+       ,@body)))
+
+(defmacro named-lambda (name params &body body)
+  `(labels ((,name ,params
+              ,@body))
+     #',name))
+
 (defmacro until (test &body body)
   `(do () (,test) ,@body))
 
