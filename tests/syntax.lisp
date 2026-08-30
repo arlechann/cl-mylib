@@ -10,13 +10,34 @@
     (ok (symbolp b))
     (ng (eq a b))))
 
-(deftest nlet-works-like-named-loop
+(deftest nlet-supports-simple-and-nested-recursion
   (ok (= 15
          (nlet sum ((i 1)
                     (acc 0))
            (if (> i 5)
                acc
-               (sum (1+ i) (+ acc i)))))))
+               (sum (1+ i) (+ acc i))))))
+  (ok (equal '(1 2 3 4)
+             (nlet flatten ((rest '((1 (2)) (3 4)))
+                            (acc nil))
+               (cond ((null rest)
+                      (nreverse acc))
+                     ((listp (car rest))
+                      (nlet flatten-branch ((branch (car rest))
+                                            (tail (cdr rest))
+                                            (acc acc))
+                        (cond ((null branch)
+                               (flatten tail acc))
+                              ((listp (car branch))
+                               (flatten-branch (append (car branch) (cdr branch))
+                                               tail
+                                               acc))
+                              (t
+                               (flatten-branch (cdr branch)
+                                               tail
+                                               (cons (car branch) acc))))))
+                     (t
+                      (flatten (cdr rest) (cons (car rest) acc))))))))
 
 (deftest lambda-macros-provide-blocks
   (ok (= 10
