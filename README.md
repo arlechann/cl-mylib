@@ -130,7 +130,7 @@ Macro: **fn\*** `&body body`
 
 ### `mylib.number`
 
-Variable: **\*eps\***
+Variable: **\*eps\*** `1d-12`
 
 Function: **square** `x`
 
@@ -300,7 +300,7 @@ Function: **list-queue-dequeue** `queue`
 
 ### `mylib.amb`
 
-Variable: **\*failed\***
+Variable: **\*failed\*** `nil`
 
 Function: **amb-reset**
 
