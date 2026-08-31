@@ -40,7 +40,9 @@
            #:conjoin
            #:disjoin
            #:pa
-           #:pa*))
+           #:pa*
+           #:fn
+           #:fn*))
 
 (defpackage #:mylib.number
   (:use #:cl)
