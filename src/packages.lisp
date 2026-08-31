@@ -1,7 +1,16 @@
 (in-package #:cl-user)
 
-(defpackage #:mylib
-  (:use #:cl))
+(uiop:define-package #:mylib
+  (:use #:cl)
+  (:use-reexport #:mylib.syntax
+                 #:mylib.function
+                 #:mylib.number
+                 #:mylib.sequence
+                 #:mylib.list
+                 #:mylib.string
+                 #:mylib.lazy
+                 #:mylib.algorithm
+                 #:mylib.amb))
 
 (defpackage #:mylib.syntax
   (:use #:cl)

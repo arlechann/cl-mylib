@@ -18,7 +18,13 @@ ASDF から `mylib` system をロードしてください。
 
 ## 使い方
 
-用途ごとに package を分けています。
+通常は `mylib` package を使えば `mylib.*` の公開シンボルがまとめて利用できます。
+
+```lisp
+(use-package :mylib)
+```
+
+用途ごとに個別 package を使うこともできます。
 
 - `mylib.syntax`
   - 制御構文や補助マクロ
@@ -42,7 +48,7 @@ ASDF から `mylib` system をロードしてください。
 - `mylib.amb`
   - `amb` による非決定的計算
 
-たとえば `mylib.list` を使う場合は次のように読み込みます。
+たとえば `mylib.list` だけを使う場合は次のように読み込みます。
 
 ```lisp
 (use-package :mylib.list)
