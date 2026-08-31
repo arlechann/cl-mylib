@@ -37,7 +37,7 @@
 
 (defpackage #:mylib/tests/list-queue
   (:use #:cl
-        #:list-queue
+        #:mylib.list-queue
         #:rove))
 
 (defpackage #:mylib/tests/algorithm

@@ -191,14 +191,14 @@
       (when (> window-size len)
         (error "WINDOW-MAP: window-size ~D exceeds sequence length ~D." window-size len))
       (let ((result (let ((index 0)
-                          (queue (list-queue:make-list-queue)))
+                          (queue (mylib.list-queue:make-list-queue)))
                       (map result-type
                            (lambda (e)
-                             (list-queue:list-queue-enqueue queue e)
+                             (mylib.list-queue:list-queue-enqueue queue e)
                              (incf index)
                              (when (>= index window-size)
-                               (prog1 (apply fn (list-queue:list-queue-raw queue))
-                                 (list-queue:list-queue-dequeue queue))))
+                               (prog1 (apply fn (mylib.list-queue:list-queue-raw queue))
+                                 (mylib.list-queue:list-queue-dequeue queue))))
                            sequence))))
         (and result
              (delete-if t-fn
@@ -218,14 +218,14 @@
         (error "WINDOW-NMAP: window-size ~D exceeds sequence length ~D." window-size len))
       (delete-if t-fn
                  (let ((index 0)
-                       (queue (list-queue:make-list-queue)))
+                       (queue (mylib.list-queue:make-list-queue)))
                    (nmap
                     (lambda (e)
-                      (list-queue:list-queue-enqueue queue e)
+                      (mylib.list-queue:list-queue-enqueue queue e)
                       (incf index)
                       (when (>= index window-size)
-                        (prog1 (apply fn (list-queue:list-queue-raw queue))
-                          (list-queue:list-queue-dequeue queue))))
+                        (prog1 (apply fn (mylib.list-queue:list-queue-raw queue))
+                          (mylib.list-queue:list-queue-dequeue queue))))
                     sequence))
                  :end (1- window-size)))))
 

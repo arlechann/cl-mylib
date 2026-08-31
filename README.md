@@ -37,12 +37,12 @@ ASDF から `mylib` system をロードしてください。
   - スライディングウィンドウ処理
 - `mylib.list`
   - list 構築・加工の補助
+- `mylib.list-queue`
+  - リストベースのキュー
 - `mylib.string`
   - 文字列処理の補助
 - `mylib.lazy`
   - 遅延評価
-- `list-queue`
-  - リストベースのキュー
 - `mylib.algorithm`
   - 二分探索系のアルゴリズム
 - `mylib.amb`
@@ -284,7 +284,7 @@ Macro: **delay** `expr`
 
 Function: **force** `promise`
 
-### `list-queue`
+### `mylib.list-queue`
 
 Function: **make-list-queue**
 

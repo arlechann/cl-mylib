@@ -1,4 +1,4 @@
-(in-package #:list-queue)
+(in-package #:mylib.list-queue)
 
 (defun make-list-queue ()
   "空の連結リストキューを生成して返す。"

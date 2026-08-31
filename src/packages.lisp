@@ -1,17 +1,5 @@
 (in-package #:cl-user)
 
-(uiop:define-package #:mylib
-  (:use #:cl)
-  (:use-reexport #:mylib.syntax
-                 #:mylib.function
-                 #:mylib.number
-                 #:mylib.sequence
-                 #:mylib.list
-                 #:mylib.string
-                 #:mylib.lazy
-                 #:mylib.algorithm
-                 #:mylib.amb))
-
 (defpackage #:mylib.syntax
   (:use #:cl)
   (:export #:it
@@ -137,7 +125,7 @@
   (:export #:delay
            #:force))
 
-(defpackage #:list-queue
+(defpackage #:mylib.list-queue
   (:use #:cl)
   (:export #:make-list-queue
            #:list-queue-empty-p
@@ -161,3 +149,16 @@
            #:amb
            #:amb-bind
            ))
+
+(uiop:define-package #:mylib
+  (:use #:cl)
+  (:use-reexport #:mylib.syntax
+                 #:mylib.function
+                 #:mylib.number
+                 #:mylib.sequence
+                 #:mylib.list
+                 #:mylib.list-queue
+                 #:mylib.string
+                 #:mylib.lazy
+                 #:mylib.algorithm
+                 #:mylib.amb))
