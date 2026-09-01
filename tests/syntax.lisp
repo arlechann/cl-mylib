@@ -66,8 +66,24 @@
                         1
                         (* n (fact (1- n)))))
                   5)))
+  (ok (= 120
+         (funcall (nlambda fact (n)
+                    (when (minusp n)
+                      (return-from fact 0))
+                    (if (zerop n)
+                        1
+                        (* n (fact (1- n)))))
+                  5)))
   (ok (= 0
          (funcall (named-lambda fact (n)
+                    (when (minusp n)
+                      (return-from fact 0))
+                    (if (zerop n)
+                        1
+                        (* n (fact (1- n)))))
+                  -1)))
+  (ok (= 0
+         (funcall (nlambda fact (n)
                     (when (minusp n)
                       (return-from fact 0))
                     (if (zerop n)

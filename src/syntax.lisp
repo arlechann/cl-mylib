@@ -76,9 +76,14 @@
        ,@body)))
 
 (defmacro named-lambda (name params &body body)
+  "LABELS を使って名前付きの関数オブジェクトを生成する。"
   `(labels ((,name ,params
               ,@body))
      #',name))
+
+(defmacro nlambda (name params &body body)
+  "NAMED-LAMBDA の alias。"
+  `(named-lambda ,name ,params ,@body))
 
 (defmacro until (test &body body)
   `(do () (,test) ,@body))

@@ -14,6 +14,7 @@
            #:nlet
            #:block-lambda
            #:named-lambda
+           #:nlambda
            #:while
            #:until
            #:aif

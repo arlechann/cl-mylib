@@ -82,6 +82,12 @@ Macro: **block-lambda** `params &body body`
 
 Macro: **named-lambda** `name params &body body`
 
+Macro: **nlambda** `name params &body body`
+
+`named-lambda` は `labels` を使って名前付きの関数オブジェクトを生成します。
+
+`nlambda` は `named-lambda` の alias です。
+
 Macro: **while** `test &body body`
 
 Macro: **until** `test &body body`
