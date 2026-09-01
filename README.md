@@ -70,7 +70,13 @@ Macro: **do-seq** `(var sequence &optional result) &body body`
 
 Macro: **do-seq\*** `((vars) (sequences) &optional result) &body body`
 
+Macro: **named-let** `name binds &body body`
+
 Macro: **nlet** `name binds &body body`
+
+`named-let` は名前付き再帰をローカルなループへ展開するマクロです。
+
+`nlet` は `named-let` の alias です。
 
 Macro: **block-lambda** `params &body body`
 

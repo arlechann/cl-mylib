@@ -42,7 +42,8 @@
 (defmacro do-seq ((var sequence &optional result) &body body)
   `(do-seq* ((,var) (,sequence) ,result) ,@body))
 
-(defmacro nlet (name binds &body body)
+(defmacro named-let (name binds &body body)
+  "名前付き再帰を、ローカル更新とジャンプによるループへ展開する。"
   (let ((tag (gensym))
         (vars (mapcar #'car binds))
         (vals (mapcar #'cadr binds))
@@ -64,6 +65,10 @@
                              `(progn (psetq ,@(mapcan #'list ',tmp-vars (list ,@rec-args)))
                                      (go ,',tag))))
                   ,@body))))))))
+
+(defmacro nlet (name binds &body body)
+  "NAMED-LET の alias。"
+  `(named-let ,name ,binds ,@body))
 
 (defmacro block-lambda (params &body body)
   `(lambda ,params

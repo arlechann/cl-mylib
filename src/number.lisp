@@ -8,7 +8,7 @@
 
 (declaim (ftype (function (t unsigned-byte &key (:op (function (t t) t)) (:identity t)) t) pow))
 (defun pow (base power &key (op #'*) (identity 1))
-  (mylib.syntax:nlet rec ((base base) (power power) (ret identity))
+  (mylib.syntax:named-let rec ((base base) (power power) (ret identity))
     (cond ((zerop power) ret)
           ((oddp power)
            (rec (square base op) (floor power 2) (funcall op ret base)))
@@ -21,7 +21,7 @@
 (defun next-pow2 (n)
   (declare (type unsigned-byte n))
   (if (zerop (logand n (1- n))) n
-      (mylib.syntax:nlet rec ((n n) (acc 1))
+      (mylib.syntax:named-let rec ((n n) (acc 1))
         (if (zerop n)
             acc
             (rec (ash n -1) (ash acc 1))))))

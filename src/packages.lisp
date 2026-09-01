@@ -10,6 +10,7 @@
            #:do-array*
            #:do-seq
            #:do-seq*
+           #:named-let
            #:nlet
            #:block-lambda
            #:named-lambda
