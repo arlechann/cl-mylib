@@ -325,7 +325,11 @@ Function: **trim-whitespace** `string`
 
 Macro: **delay** `expr`
 
+`delay` は `expr` の評価を遅延し、最初の `force` 時に一度だけ評価します。
+
 Function: **force** `promise`
+
+`force` は promise を一度だけ評価します。promise でない値を渡した場合は、その値をそのまま返します。
 
 Function: **lcar** `cell`
 

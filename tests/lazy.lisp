@@ -13,6 +13,12 @@
     (ok (= 42 (force p)))
     (ok (= 1 cnt))))
 
+(deftest force-returns-non-promises-unchanged
+  (ok (null (force nil)))
+  (ok (= 42 (force 42)))
+  (let ((value 42))
+    (ok (= 42 (force value)))))
+
 (deftest define-lazy-constant-delays-and-memoizes
   (let ((name (fresh-lazy-constant-name)))
     (setf *lazy-constant-evaluation-count* 0)

@@ -2,13 +2,24 @@
 
 (defstruct promise (value nil) thunk)
 
-(defmacro delay (expr) `(make-promise :thunk (lambda () ,expr)))
+(defmacro delay (expr)
+  "EXPR の評価を遅延し、最初の FORCE 時に一度だけ評価する promise を生成する。"
+  `(make-promise :thunk (lambda () ,expr)))
 
-(defun force (ps)
-  (when (promise-thunk ps)
-    (setf (promise-value ps) (funcall (promise-thunk ps))
-          (promise-thunk ps) nil))
-  (promise-value ps))
+(defun force (value)
+  "PROMISE なら一度だけ評価し、それ以外の VALUE はそのまま返す。"
+  (if (promise-p value)
+      (progn
+        (when (promise-thunk value)
+          (setf (promise-value value) (funcall (promise-thunk value))
+                (promise-thunk value) nil))
+        (promise-value value))
+      value))
+
+(define-compiler-macro force (&whole form value)
+  (if (constantp value)
+      value
+      form))
 
 (defmacro lcons (car cdr)
   "遅延された cons cell を生成する。"
