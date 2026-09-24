@@ -27,7 +27,7 @@
     (ok (equal '(1 2 3) (coerce v 'list)))
     (ok (array-has-fill-pointer-p v))
     (ok (adjustable-array-p v)))
-  (let* ((v #(1 2 3 4))
+  (let* ((v (vector 1 2 3 4))
          (sub (displaced-subvec v :start 1 :end 3)))
     (ok (equal '(2 3) (coerce sub 'list)))
     (setf (aref sub 0) 20)
