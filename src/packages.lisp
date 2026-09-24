@@ -125,7 +125,12 @@
 (defpackage #:mylib.lazy
   (:use #:cl)
   (:export #:delay
-           #:force))
+           #:lazy-let
+           #:define-lazy-constant
+           #:force
+           #:lcar
+           #:lcdr
+           #:lcons))
 
 (defpackage #:mylib.list-queue
   (:use #:cl)

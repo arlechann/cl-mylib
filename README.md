@@ -327,6 +327,22 @@ Macro: **delay** `expr`
 
 Function: **force** `promise`
 
+Function: **lcar** `cell`
+
+Function: **lcdr** `cell`
+
+Macro: **lcons** `car cdr`
+
+`lcons` は `car` や `cdr` ではなく、cell 自体を遅延します。
+
+Macro: **lazy-let** `binds &body body`
+
+`lazy-let` は binding の値に暗黙的に `delay` を適用し、binding を参照するときに暗黙的に `force` します。binding 同士は相互再帰できます。実装上、binding 名は symbol macro として定義されます。
+
+Macro: **define-lazy-constant** `name value &optional documentation`
+
+`define-lazy-constant` は遅延評価されるグローバルな定数を定義します。参照時に `value` を一度だけ評価し、公開 symbol 自体は変数ではありません。実装上、公開 symbol は symbol macro として定義されます。定義フォームを再評価すると新しい値に置き換わります。
+
 ### `mylib.list-queue`
 
 Function: **make-list-queue**
