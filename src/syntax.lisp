@@ -125,20 +125,20 @@
      (if (and ,@(mapcar #'car binds)) ,then ,else)))
 
 (defmacro and-let* (binds &body body)
-  (labels ((expand (rest-binds)
-             (if (null rest-binds)
-                 (if body
-                     `(progn ,@body)
-                     t)
-                 (destructuring-bind (var value-form) (car rest-binds)
-                   `(let ((,var ,value-form))
-                      (and ,var
-                           ,(if (null (cdr rest-binds))
-                                (if body
-                                    `(progn ,@body)
-                                    var)
-                                (expand (cdr rest-binds)))))))))
-    (expand binds)))
+  (labels ((expand (binds)
+             (destructuring-bind (var form) (car binds)
+               `(let ((,var ,form))
+                  (and ,var
+                       ,(if (null (cdr binds))
+                            (if body
+                                `(progn ,@body)
+                                var)
+                            (expand (cdr binds))))))))
+    (if (null binds)
+        (if (null body)
+            't
+            `(progn ,@body))
+        (expand binds))))
 
 (defmacro when-let (binds &body body)
   `(let ,binds
